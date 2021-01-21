@@ -65,17 +65,37 @@ public class Enemy : MonoBehaviour
                                
                 if (Physics.Raycast(atkPoint.position, atkPoint.forward, out hit, atkLength, 1 << 8))
                 {
-                    hit.collider.GetComponent<Player>().Damage();
+                    hit.collider.GetComponent<Player>().Damage(atk);
 
                 }
             }
         }
     }
+
     public float hp = 100;
 
     public void Damage(float damage)
     {
-        
+        hp -= damage;
+        ani.SetTrigger("受傷觸發");
+
+        if (hp <= 0) Dead();
+
+    }
+
+    private void Dead()
+    {
+        ani.SetTrigger("死亡觸發");
+    }
+
+    public float hp = 100;
+
+    public void Damage(float damage)
+    {
+        hp -= damage;
+        ani.SetTrigger("受傷觸發");
+
+        if (hp <= 0) Dead();
     }
     private void Track() 
     {
@@ -83,9 +103,5 @@ public class Enemy : MonoBehaviour
 
         ani.SetBool("跑步開關", nav.remainingDistance > stopDistance);
     }
-
-
-
-
 
 }
